@@ -1,6 +1,7 @@
 ﻿using BeautyEcommerce.Data;
 using BeautyEcommerce.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeautyEcommerce.Controllers
 {
@@ -45,6 +46,30 @@ namespace BeautyEcommerce.Controllers
                 MoTaNgan = product.MoTa ?? "",
                 TenLoai = product.MaLoaiNavigation.TenLoai
             });
+            return View(result);
+        }
+        public IActionResult Detail(int id)
+        {
+            var data = _context.HangHoas
+                .Include(product => product.MaLoaiNavigation) 
+                .SingleOrDefault(product => product.MaHh == id);
+            if (data == null)
+            {
+                TempData["Message"] = $"Không tìm thấy sản phẩm có mã {id}";
+                return Redirect("/404");
+            }
+            var result = new ChiTietHangHoaVM
+            {
+                MaHh = data.MaHh,
+                TenHh = data.TenHh,
+                DonGia = data.DonGia ?? 0,
+                ChiTiet = data.MoTa ?? string.Empty,
+                Hinh = data.Hinh ?? string.Empty,
+                MoTaNgan = data.MoTa ?? string.Empty,
+                TenLoai = data.MaLoaiNavigation.TenLoai,
+                SoLuongTon = 10,
+                DiemDanhGia = 5
+            };
             return View(result);
         }
     }
