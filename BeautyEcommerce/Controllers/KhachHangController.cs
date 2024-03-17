@@ -88,7 +88,7 @@ namespace BeautyEcommerce.Controllers
                             var claims = new List<Claim>() {
                                 new Claim(ClaimTypes.Email, khachHang.Email),
                                 new Claim(ClaimTypes.Name, khachHang.HoTen),
-                                new Claim("CustomerId", khachHang.MaKh),
+                                new Claim(MySetting.CLAIM_CUSTOMER_ID, khachHang.MaKh),
                                 new Claim(ClaimTypes.Role, "Customer")
                             };
 
